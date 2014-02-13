@@ -99,6 +99,7 @@ void f2fstat(struct options *opt)
 		{ "  - SITs",		&dirty_sit,		0 },
 		{ "  - Valid",		&valid_segs,		0 },
 		{ "  - dents",		&dirty_dents,		0 },
+		{ "  - free_nids",	&free_nids,		0 },
 		{ "  - meta",		&dirty_meta,		KEY_META },
 		{ "  - nodes",		&dirty_node,		KEY_NODE },
 		{ "CP calls",		&cp,			0 },
@@ -215,13 +216,13 @@ void parse_option(int argc, char *argv[], struct options *opt)
 
 void print_head(void)
 {
-	fprintf(stderr, "---utilization--- -----------main area-------- ---balancing async-- -gc- ---alloc--- -----memory-----\n");
-	fprintf(stderr, "util  node   data   free  valid  dirty prefree node  dent meta sit  cp   gc    ssr    lfs  total  node  meta\n");
+	fprintf(stderr, "---utilization--- -----------main area-------- ---------balancing async------- ---gc--- ---alloc--- -----memory-----\n");
+	fprintf(stderr, "util  node   data   free  valid  dirty prefree node  dent meta  sit   nat fnid  cp   gc    ssr    lfs  total  node  meta\n");
 }
 
 int f2fstat_main(int argc, char *argv[])
 {
-	char format[] = "%3ld %6ld %6ld %6ld %6ld %6ld %6ld %5ld %5ld %3ld %3ld %3ld %5ld %6ld %6ld %6ld %6ld %6ld\n";
+	char format[] = "%3ld %6ld %6ld %6ld %6ld %6ld %6ld %5ld %5ld %3ld %5ld %5ld %3ld %3ld %3ld %6ld %6ld %6ld %6ld %6ld\n";
 	int head_interval;
 	struct options opt = {
 		.delay = 1,
@@ -246,7 +247,7 @@ int f2fstat_main(int argc, char *argv[])
 
 		fprintf(stderr, format, util, used_node_blks, used_data_blks,
 			free_segs, valid_segs, dirty_segs, prefree_segs,
-			dirty_node, dirty_dents, dirty_meta, dirty_sit,
+			dirty_node, dirty_dents, dirty_meta, dirty_sit, nat_caches, free_nids,
 			cp, gc, ssr_blks, lfs_blks, memory_kb, node_kb, meta_kb);
 
 		sleep(opt.delay);
